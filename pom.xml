@@ -36,11 +36,27 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- needed for generated code of OpenAPI contract -->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -56,6 +72,33 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>5.3.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/user-contract.yaml</inputSpec>
+							<generateApiDocumentation>false</generateApiDocumentation>
+							<generatorName>spring</generatorName>
+							<invokerPackage>com.hashnode.rubenscheedler.layeredArchitectureBackend.presentation.api.invoker</invokerPackage>
+							<modelPackage>com.hashnode.rubenscheedler.layeredArchitectureBackend.presentation.api.model</modelPackage>
+							<apiPackage>com.hashnode.rubenscheedler.layeredArchitectureBackend.presentation.api</apiPackage>
+							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+							<configOptions>
+								<delegatePattern>true</delegatePattern>
+								<useTags>true</useTags>
+								<unhandledException>true</unhandledException>
+								<openApiNullable>false</openApiNullable>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
