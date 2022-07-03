@@ -1,0 +1,168 @@
+openapi: 3.0.3
+
+info:
+  title: Users API
+  description: Simple contract for a user management system
+
+  version: "0.1"
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+
+  /api/user:
+    post:
+      tags:
+        - user
+      summary: Creates a new user
+      operationId: CreateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user_creation_request"
+      responses:
+        201:
+          description: Created
+          headers:
+            Location:
+              description: The location of the created user.
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        500:
+          $ref: "#/components/responses/500"
+  /api/user/{userId}:
+    parameters:
+      - in: path
+        name: userId
+        schema:
+          type: string
+          format: uuid
+        example: ca6373d2-aea7-4026-817c-d6a3e7995c1b
+        required: true
+        description: Unique identifier of a user
+    get:
+      tags:
+        - user
+      summary: Retrieves a user without their sensitive information
+      operationId: getUser
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+    patch:
+      tags:
+        - user
+      summary: Updates an existing user with the passed information. Other properties remain unchanged
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user_update_request"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        500:
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - user
+      summary: Permanently deletes a user
+      operationId: deleteUser
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+        500:
+          $ref: "#/components/responses/500"
+
+components:
+
+  schemas:
+
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ca6373d2-aea7-4026-817c-d6a3e7995c1b
+        emailadress:
+          type: string
+          format: email
+        username:
+          type: string
+        nickname:
+          type: string
+      required:
+        - id
+        - emailadress
+        - username
+        - nickname
+
+    user_creation_request:
+      type: object
+      properties:
+        emailadress:
+          type: string
+          format: email
+        username:
+          type: string
+        password:
+          type: string
+        nickname:
+          type: string
+      required:
+        - emailadress
+        - username
+        - password
+        - nickname
+
+    user_update_request:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        nickname:
+          type: string
+      required:
+        - username
+        - password
+        - nickname
+
+  parameters:
+
+    user_id:
+      name: user_id
+      in: path
+      description: Unique id of a user
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: bcdf9f38-6b00-4601-b9a8-c44ba8865ff0
+
+  responses:
+
+    200:
+      description: OK
+    500:
+      description: Server Error
+
