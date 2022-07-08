@@ -100,7 +100,7 @@ class UserServiceTest {
         when(userRepository.update(eq(userToUpdate))).thenReturn(userToUpdate);
 
         // WHEN I ask the user service to update the user
-        User actual = userService.update(userToUpdate);
+        User actual = userService.updateUser(userToUpdate);
 
         // THEN I expect this to happen via the repository
         verify(userRepository).update(userToUpdate);

@@ -42,7 +42,8 @@ public class UserService {
      * @param user User in its new state
      * @return User after updating it
      */
-    public User update(User user) {
+    public User updateUser(User user) {
         return userRepository.update(user);
     }
+
 }
