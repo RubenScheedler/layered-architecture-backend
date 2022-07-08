@@ -1,5 +1,6 @@
 package com.hashnode.rubenscheedler.layeredArchitectureBackend.business;
 
+import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.exception.UserNotFoundException;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.entity.User;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.EmailAddress;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.UncreatedUser;
@@ -11,9 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -48,5 +51,38 @@ class UserServiceTest {
         // THEN I expect that user to be created and returned
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void getUser_userExists_userIsReturned() {
+        // GIVEN an existing user
+        UserId userId = UserId.builder().value(UUID.randomUUID()).build();
+        User expected = User.builder()
+                .id(userId)
+                .emailAddress(EmailAddress.builder().value("john.doe@gmail.com").build())
+                .username("john.doe33")
+                .nickname("TheRealJohnDoe")
+                .build();
+        when(userRepository.getUser(eq(userId))).thenReturn(Optional.of(expected));
+
+        // WHEN I retrieve that user via the user service
+        User actual = userService.getUser(userId);
+
+        // THEN I expect to receive that user
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void getUser_userDoesNotExists_exceptionThrown() {
+        // GIVEN the id of a non-existing user
+        UserId userId = UserId.builder().value(UUID.randomUUID()).build();
+        when(userRepository.getUser(eq(userId))).thenReturn(Optional.empty());
+
+        // WHEN I retrieve that user via the user service
+        // THEN I expect an exception because the user does not exist
+        assertThatThrownBy(() -> userService.getUser(userId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage(String.format("The user with id %s could not be found", userId.getValue()));
     }
 }
