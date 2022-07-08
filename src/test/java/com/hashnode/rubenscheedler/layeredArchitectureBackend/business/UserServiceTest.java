@@ -5,7 +5,6 @@ import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.ent
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.EmailAddress;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.UncreatedUser;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.UserId;
-import com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

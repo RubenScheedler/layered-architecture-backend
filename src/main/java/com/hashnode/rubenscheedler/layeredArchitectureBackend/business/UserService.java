@@ -4,7 +4,6 @@ import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.exception
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.entity.User;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.UncreatedUser;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.UserId;
-import com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
