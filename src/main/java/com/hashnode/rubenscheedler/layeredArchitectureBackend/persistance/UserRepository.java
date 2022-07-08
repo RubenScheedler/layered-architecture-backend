@@ -10,18 +10,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, UUID> {
-    default User createUser(UncreatedUser uncreatedUser) {
+public class UserRepository {
+    public User createUser(UncreatedUser uncreatedUser) {
         return null;
     }
 
-    default Optional<User> getUser(UserId userId) {
+    public Optional<User> getUser(UserId userId) {
         return Optional.empty();
     }
 
-    default User update(User user) {
+    public User update(User user) {
         return null;
     }
 
-    void deleteById(UserId userId);
+    public void deleteById(UserId userId) {
+
+    }
 }
