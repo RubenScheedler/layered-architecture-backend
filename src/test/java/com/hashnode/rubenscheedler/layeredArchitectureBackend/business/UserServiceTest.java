@@ -106,4 +106,16 @@ class UserServiceTest {
         verify(userRepository).update(userToUpdate);
         assertThat(actual).isEqualTo(userToUpdate);
     }
+
+    @Test
+    void deleteUser_deletesUserViaRepository() {
+        // GIVEN a user to delete
+        UserId userId = UserId.builder().value(UUID.randomUUID()).build();
+
+        // WHEN I ask the user service to delete the user
+        userService.deleteUser(userId);
+
+        // THEN I expect this to happen via the repository
+        verify(userRepository).deleteById(userId);
+    }
 }

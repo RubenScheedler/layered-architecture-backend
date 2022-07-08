@@ -22,4 +22,6 @@ public interface UserRepository extends CrudRepository<User, UUID> {
     default User update(User user) {
         return null;
     }
+
+    void deleteById(UserId userId);
 }

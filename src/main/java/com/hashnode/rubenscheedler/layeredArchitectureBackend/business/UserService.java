@@ -46,4 +46,10 @@ public class UserService {
         return userRepository.update(user);
     }
 
+    /**
+     * Deletes the user with the given id.
+     */
+    public void deleteUser(UserId userId) {
+        userRepository.deleteById(userId);
+    }
 }
