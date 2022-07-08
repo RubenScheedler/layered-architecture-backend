@@ -18,6 +18,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -84,5 +85,25 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.getUser(userId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage(String.format("The user with id %s could not be found", userId.getValue()));
+    }
+
+    @Test
+    void updateUser_updatesUserViaTheRepository() {
+        // GIVEN a user to update
+        User userToUpdate = User.builder()
+                .id(UserId.builder().value(UUID.randomUUID()).build())
+                .emailAddress(EmailAddress.builder().value("john.doe@gmail.com").build())
+                .username("john.doe34")
+                .nickname("TheRealJohnDoe2")
+                .build();
+        // AND GIVEN a repository to save the user with
+        when(userRepository.update(eq(userToUpdate))).thenReturn(userToUpdate);
+
+        // WHEN I ask the user service to update the user
+        User actual = userService.update(userToUpdate);
+
+        // THEN I expect this to happen via the repository
+        verify(userRepository).update(userToUpdate);
+        assertThat(actual).isEqualTo(userToUpdate);
     }
 }

@@ -18,4 +18,8 @@ public interface UserRepository extends CrudRepository<User, UUID> {
     default Optional<User> getUser(UserId userId) {
         return Optional.empty();
     }
+
+    default User update(User user) {
+        return null;
+    }
 }

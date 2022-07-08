@@ -36,4 +36,13 @@ public class UserService {
                     )
                 );
     }
+
+    /**
+     * Updates a user
+     * @param user User in its new state
+     * @return User after updating it
+     */
+    public User update(User user) {
+        return userRepository.update(user);
+    }
 }
