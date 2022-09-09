@@ -24,6 +24,8 @@ public class User {
     @NonNull
     private byte[] password;
     @NonNull
+    private byte[] salt;
+    @NonNull
     private String nickname;
 }
 

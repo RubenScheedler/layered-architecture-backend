@@ -28,6 +28,11 @@ databaseChangeLog:
                      constraints:
                        nullable:  false
                 -  column:
+                     name:  salt
+                     type:  varbinary(16)
+                     constraints:
+                       nullable:  false
+                -  column:
                      name:  nickname
                      type:  varchar(256)
                      constraints:
