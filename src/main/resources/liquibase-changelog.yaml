@@ -4,7 +4,7 @@ databaseChangeLog:
        author:  Ruben Scheedler
        changes:
          -  createTable:
-              tableName:  user
+              tableName:  users # user is a keyword in at least h2 db
               columns:
                 -  column:
                      name:  id
@@ -24,7 +24,7 @@ databaseChangeLog:
                        nullable:  false
                 -  column:
                      name:  password
-                     type:  varchar(256)
+                     type:  varbinary(256)
                      constraints:
                        nullable:  false
                 -  column:
