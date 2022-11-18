@@ -2,6 +2,7 @@ package com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance;
 
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.EmailAddress;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.UncreatedUser;
+import com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.value.UserId;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance.crudrepository.UserCrudRepository;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance.model.User;
 import com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance.password.HashedPassword;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.lang.model.util.Types;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,5 +80,45 @@ public class UserRepositoryImplTest {
         assertThat(actualReturned.getEmailAddress()).isEqualTo(uncreatedUser.getEmailAddress());
         assertThat(actualReturned.getUsername()).isEqualTo(uncreatedUser.getUsername());
         assertThat(actualReturned.getNickname()).isEqualTo(uncreatedUser.getNickname());
+    }
+
+    @Test
+    void getUser_userExists_givesUser() {
+        // Given that a user exists
+        UUID userId = UUID.randomUUID();
+        User expected = User.builder()
+                .id(userId)
+                .emailaddress("john.smith@host.com")
+                .username("JohnSmith")
+                .nickname("TheSmith")
+                .password(new byte[]{1, 2, 3, 4})
+                .salt(new byte[]{5, 6, 7, 8})
+                .build();
+        when(userCrudRepository.findById(any())).thenReturn(Optional.of(expected));
+
+        // When I look up that user with the repository
+        Optional<com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.entity.User> actualOptional = userRepository.getUser(UserId.builder().value(userId).build());
+
+        // Then I expect to get that user
+        assertThat(actualOptional).isPresent();
+        com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.entity.User actual = actualOptional.get();
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isNotNull();
+        assertThat(actual.getEmailAddress()).isNotNull();
+        assertThat(actual.getEmailAddress().getValue()).isEqualTo(expected.getEmailaddress());
+        assertThat(actual.getUsername()).isEqualTo(expected.getUsername());
+        assertThat(actual.getNickname()).isEqualTo(expected.getNickname());
+    }
+
+    @Test
+    void getUser_userDoesNotExist_givesEmptyOptional() {
+        // Given a certain user does not exist
+        when(userCrudRepository.findById(any())).thenReturn(Optional.empty());
+
+        // When I look up that user with the repository
+        Optional<com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.entity.User> actualOptional = userRepository.getUser(UserId.builder().value(UUID.randomUUID()).build());
+
+        // Then I expect to get an empty optional
+        assertThat(actualOptional).isEmpty();
     }
 }

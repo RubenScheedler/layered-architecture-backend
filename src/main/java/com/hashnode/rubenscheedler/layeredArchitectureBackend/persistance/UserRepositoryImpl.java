@@ -49,17 +49,12 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    private User mapUserToBusinessEntity(com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance.model.User user) {
-        return User.builder()
-                .id(UserId.builder().value(user.getId()).build())
-                .emailAddress(EmailAddress.builder().value(user.getEmailaddress()).build())
-                .username(user.getUsername())
-                .nickname(user.getNickname())
-                .build();
-    }
-
+    /**
+     * Looks up a user in the db.
+     * @param userId Id of the user to look up.
+     */
     public Optional<User> getUser(UserId userId) {
-        return Optional.empty();
+        return userCrudRepository.findById(userId.getValue()).map(this::mapUserToBusinessEntity);
     }
 
     public User update(User user) {
@@ -68,5 +63,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     public void deleteById(UserId userId) {
 
+    }
+
+    private User mapUserToBusinessEntity(com.hashnode.rubenscheedler.layeredArchitectureBackend.persistance.model.User user) {
+        return User.builder()
+                .id(UserId.builder().value(user.getId()).build())
+                .emailAddress(EmailAddress.builder().value(user.getEmailaddress()).build())
+                .username(user.getUsername())
+                .nickname(user.getNickname())
+                .build();
     }
 }
