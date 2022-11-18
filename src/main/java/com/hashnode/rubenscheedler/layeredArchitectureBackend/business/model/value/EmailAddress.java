@@ -2,7 +2,9 @@ package com.hashnode.rubenscheedler.layeredArchitectureBackend.business.model.va
 
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.Value;
 
+@Value
 @Builder
 public class EmailAddress {
     @NonNull
